@@ -6,6 +6,8 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
 
+const fs = require("fs");
+
 var app = express();
 
 app.use(cors());
@@ -39,6 +41,14 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 
 app.post("/api/fileanalyse", upload.single('upfile'), (req, res) => {
+
+  fs.unlink("uploads/" + req.file.filename, (err) => {
+    if (err) {
+      console.error('Error deleting file:', err);
+    } else {
+      console.log('File deleted successfully!');
+    }
+  });
 
   res.json({
     name: req.file.originalname,
